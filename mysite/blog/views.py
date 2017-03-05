@@ -12,12 +12,37 @@ def post_list(request):
 	return render(request, 'blog/post_list.html', {'posts': posts})
 
 
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.db.models import Count
+# def post_list(request):
+#     """所有已发布文章"""
+#     postsAll = Post.objects.annotate(num_comment=Count('comment')).filter(
+#         published_date__isnull=False).prefetch_related(
+#         'category').prefetch_related('tags').order_by('-published_date')
+#     for p in postsAll:
+#         p.click = cache_manager.get_click(p)
+#     paginator = Paginator(postsAll, 10)  # Show 10 contacts per page
+#     page = request.GET.get('page')
+#     try:
+#         posts = paginator.page(page)
+#     except PageNotAnInteger:
+#         # If page is not an integer, deliver first page.
+#         posts = paginator.page(1)
+#     except EmptyPage:
+#         # If page is out of range (e.g. 9999), deliver last page of results.
+#         posts = paginator.page(paginator.num_pages)
+#     return render(request, 'blog/post_list.html', {'posts': posts, 'page': True})
+
 
 
 
 from .forms import PostForm
 from django.core.urlresolvers import reverse
 from django.shortcuts import redirect
+from django.contrib.auth.decorators import login_required
+
+
+@login_required
 def post_new(request):
     if request.method == "POST":
         form = PostForm(request.POST)
@@ -30,7 +55,7 @@ def post_new(request):
         form = PostForm()
     return render(request, 'blog/post_edit.html', {'form': form})
 
-
+@login_required
 def post_edit(request, pk):
     post = get_object_or_404(Post, pk=pk)
     if request.method == "POST":
@@ -44,7 +69,25 @@ def post_edit(request, pk):
         form = PostForm(instance=post)
     return render(request, 'blog/post_edit.html', {'form': form})
 
-
+@login_required
 def post_draft_list(request):
     posts = Post.objects.filter(published_date__isnull=True).order_by('-created_date')
     return render(request, 'blog/post_draft_list.html', {'posts': posts})
+
+@login_required
+def post_publish(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    post.publish()
+    return redirect('blog.views.post_detail', pk=pk)
+
+
+@login_required
+def post_remove(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    post.delete()
+    return redirect('blog.views.post_list')
+
+
+
+
+

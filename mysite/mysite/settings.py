@@ -127,3 +127,8 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
+
+
+# 增加用户登录重定向到文章列表界面
+LOGIN_REDIRECT_URL = '/'
+
