@@ -1,4 +1,4 @@
-
+#-*-coding: utf-8-*-
 # Create your views here.
 from .models import Post
 from django.shortcuts import render, get_object_or_404
@@ -15,7 +15,7 @@ def post_list(request):
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Count
 # def post_list(request):
-#     """所有已发布文章"""
+#     
 #     postsAll = Post.objects.annotate(num_comment=Count('comment')).filter(
 #         published_date__isnull=False).prefetch_related(
 #         'category').prefetch_related('tags').order_by('-published_date')
