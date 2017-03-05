@@ -132,3 +132,14 @@ STATICFILES_DIRS = (
 
 LOGIN_REDIRECT_URL = '/'
 
+
+from django.utils.translation import ugettext_lazy as _
+LANGUAGES = (
+    ('zh-cn', _('Simplified Chinese')),
+    ('en', _('English')),
+)
+LOCALE_PATHS = (
+    os.path.join(BASE_DIR, "locale"),
+)
+
+

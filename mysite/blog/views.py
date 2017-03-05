@@ -1,4 +1,4 @@
-#-*-coding: utf-8-*-
+#-*- coding: utf-8 -*-
 # Create your views here.
 from .models import Post
 from django.shortcuts import render, get_object_or_404
